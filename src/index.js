@@ -24,6 +24,7 @@ class Buttons extends React.Component {
         return (
             <div className='buttons'>
                 <div>
+                    <button className="btn" onClick={this.props.nextButton}>Next</button>
                     <button className="btn" onClick={this.props.playButton}>Play</button>
                     <button className="btn" onClick={this.props.pauseButton}>Pause</button>
                 </div>
@@ -89,15 +90,15 @@ class App extends React.Component {
     constructor(props) {
         super(props);
         this.speed = 100;
-        this.rows = 60;
-        this.cols = 60;
+        this.rows = 20;
+        this.cols = 20;
         this.state = {
             generation: 0,
             gridFull: Array(this.rows).fill(Array(this.cols).fill(false)),
             generationCycle: Array(this.rows).fill(Array(this.cols).fill(0)),
             dieMin: 2,
             dieMax: 3,
-            alive: 2,
+            alive: 3,
         }
     }
 
@@ -115,6 +116,10 @@ class App extends React.Component {
     playButton = () => {
         clearInterval(this.intervalId);
         this.intervalId = setInterval(this.play, this.speed);
+    }
+
+    nextButton = () => {
+        this.play();
     }
 
     pauseButton = () => {
@@ -187,23 +192,32 @@ class App extends React.Component {
         for (let i = 0; i < this.rows; i++) {
             for (let j = 0; j < this.cols; j++) {
                 let count = 0;
-                if (i > 0) if (grid[i - 1]) count++;
-                if (i > 0 && j > 0) if (grid[i - 1][j-1]) count++;
+                if (i > 0) if (grid[i - 1][j]) count++;
+                if (i > 0 && j > 0) if (grid[i - 1][j - 1]) count++;
                 if (i > 0 && j < this.cols - 1) if (grid[i - 1][j + 1]) count++;
-                if (j < this.cols - 1) if (grid[i][j+1]) count++;
-                if (j > 0) if (grid[i][j-1]) count++;
-                if (i < this.rows - 1) if (grid[i+1][j]) count++;
-                if (i < this.rows - 1 && j > 0) if (grid[i+1][j-1]) count++;
-                if (i < this.rows - 1 && this.cols - 1) if (grid[i+1][j+1]) count++;
+                if (j < this.cols - 1) if (grid[i][j + 1]) count++;
+                if (j > 0) if (grid[i][j - 1]) count++;
+                if (i < this.rows - 1) if (grid[i + 1][j]) count++;
+                if (i < this.rows - 1 && j > 0) if (grid[i + 1][j - 1]) count++;
+                if (i < this.rows - 1 && j < this.cols - 1) if (grid[i + 1][j + 1]) count++;
+
+
                 if (grid[i][j] && (count < this.state.dieMin || count > this.state.dieMax)) {
                     gridClone[i][j] = false;
+                    cycleClone[i][j] = 0;
                 }
+
+                if (grid[i][j] && (count >= this.state.dieMin || count <= this.state.dieMax)) {
+                    cycleClone[i][j]++
+                }
+
                 if (!grid[i][j] && count === this.state.alive) {
                     gridClone[i][j] = true;
                     cycleClone[i][j]++
                 }
             }
         }
+
 
         this.setState({
             gridFull: gridClone,
@@ -222,6 +236,7 @@ class App extends React.Component {
                 <div className="col">
                     <h1>The Game of Life</h1>
                     <Buttons
+                        nextButton={this.nextButton}
                         playButton={this.playButton}
                         pauseButton={this.pauseButton}
                         slow={this.slow}
