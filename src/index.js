@@ -89,9 +89,9 @@ class Grid extends React.Component {
 class App extends React.Component {
     constructor(props) {
         super(props);
-        this.speed = 100;
-        this.rows = 20;
-        this.cols = 20;
+        this.speed = 50;
+        this.rows = 70;
+        this.cols = 70;
         this.state = {
             generation: 0,
             gridFull: Array(this.rows).fill(Array(this.cols).fill(false)),
