@@ -36,15 +36,15 @@ class Buttons extends React.Component {
                     <button className="btn" onClick={this.props.fast}>Fast</button>
                 </div>
                 <p>
-                    <span>Die min condition</span>
+                    <span>Die if less than</span>
                     <input placeholder="2" onInput={this.props.changeDieMin}/>
                 </p>
                 <p>
-                    <span>Die max condition</span>
+                    <span>Die if more than</span>
                     <input placeholder="3" onInput={this.props.changeDieMax}/>
                 </p>
                 <p>
-                    <span>Alive condition</span>
+                    <span>Alive if exactly</span>
                     <input placeholder="3" onInput={this.props.changeAlive}/>
                 </p>
             </div>
